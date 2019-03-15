@@ -1,0 +1,101 @@
+#galary{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+
+.shadowboxGalary{
+    box-shadow: inset 0px 0px 100px 35px rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 14;
+}
+
+.buttonGalary{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    z-index: 15;
+    right: 0;
+    color: white;
+    transition: 250ms;
+}
+
+.buttonGalary ~ .buttonGalary {
+    left: 0;
+}
+
+.buttonGalary ~ .buttonGalary::before {
+    font-family: "Font Awesome 5 Free"; font-weight: 900; 
+    content: "\f104";
+    left: 5%;
+}
+
+.buttonGalary ~ .buttonGalary:hover, .buttonGalary:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.buttonGalary::before{
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    font-size: 70px;
+    font-family: "Font Awesome 5 Free"; font-weight: 900; 
+    content: "\f105";
+}
+
+#galary > img{
+    position: absolute;
+    box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+}
+
+.horisontalImgGalary{
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: auto;
+}
+
+.verticalImgGalary{
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    width: auto;
+}
+
+.blurImgGalary{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    filter: blur(5px);
+}
+
+.pointsBlockGalary{
+    position: absolute;
+    z-index: 20;
+    left: 50%;
+    bottom: 5%;
+    transform: translateX(-50%);
+    display: flex;
+}
+
+.pointGalary{
+    width: 50px;
+    height: 50px;
+    margin: 0px 10px 0px 10px;
+    background: white;
+    border-radius: 100%;
+}
+
+.pointGalary:hover{cursor: pointer}

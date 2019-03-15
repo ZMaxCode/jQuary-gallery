@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<link href="galary.css" rel="stylesheet"> <!--стили галереи. Обязателен для правильного отображения галереи-->
+		<script src="js/jquery.js" type="text/javascript"></script> <!--jQuary. Обязателен для работы галереи-->
+		<script src="js/galary.js" type="text/javascript"></script>	<!--Код работы галереи. Обязателен для ее работы-->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">	<!--стиль левой и правой стрелочки. Не обязателен, можно изменить в css-->
+		<title>Galary </title>
+	</head>
+	
+  <body>
+		<div style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100vw; height: 80vh;">			<!--любой блок, в который полностью обернете галерею -->
+
+			<!--галерея с id = galary. Обязатольно для работы галереи
+			speedOfScroll - интервал перелистывания изображений. По умолчанию 3000мс
+			speedAnimation - время, за которое изображения меняются. По умолчанию 1000мс
+			visibleButtons - отображение левой и правой кнопок. По умолчанию true
+			visiblePoints - отображение точек. По умолчанию true
+			activeInterval - активация интервала перелистывания изображений. По умолчанию true
+			stopInterval - остановка интервала при наведении мыши на галерею и запуск при удалении из галереи. По умолчанию true
+			 -->
+			 
+			<div id = "galary"			
+			speedOfScroll = "2000"
+			speedAnimation = "750"
+			visibleButtons = "true"
+			visiblePoints = "true"
+			activeInterval = "true"
+			stopInterval = "true"
+			>
+				<img src = "./images/img1.jpg"/>
+				<img src = "./images/img2.jpg"/>
+				<img src = "./images/img4.jpg"/>
+				<img src = "./images/img3.jpg"/>
+			</div>
+	</div>
+	</body>
+</html>
