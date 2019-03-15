@@ -170,11 +170,13 @@ function imageAnimation(a){
 	}
 	else if(scrollStyle == "flip"){
 		if(a == 1){
-			img.css({'z-index': '10', 'opacity': '0', 'left': '0%'});
+			if(sizeImg[secondImg] == "50%") img.css({'z-index': '10', 'opacity': '0', 'left': '-25%'});
+			else img.css({'z-index': '10', 'opacity': '0', 'left': '-75%'});
 			img.animate({left: sizeImg[secondImg], opacity: "1"}, speedAnimation);
 		}
 		else{
-			img.css({'z-index': '10', 'opacity': '0', 'left': '100%'});
+			if(sizeImg[secondImg] == "50%") img.css({'z-index': '10', 'opacity': '0', 'left': '125%'});
+			else img.css({'z-index': '10', 'opacity': '0', 'left': '75%'});
 			img.animate({left: sizeImg[secondImg], opacity: "1"}, speedAnimation);
 		}
 	}
