@@ -12,7 +12,7 @@
 	</head>
 	
   <body>
-		<div style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100vw; height: 80vh;">			<!--любой блок, в который полностью обернете галерею -->
+		<div style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50vw; height: 50vw;">			<!--любой блок, в который полностью обернете галерею -->
 
 			<!--галерея с id = galary. Обязатольно для работы галереи
 			speedOfScroll - интервал перелистывания изображений. По умолчанию 3000мс
@@ -21,15 +21,17 @@
 			visiblePoints - отображение точек. По умолчанию true
 			activeInterval - активация интервала перелистывания изображений. По умолчанию true
 			stopInterval - остановка интервала при наведении мыши на галерею и запуск при удалении из галереи. По умолчанию true
+			scrollStyle - стиль анимации. "flash" - изображение всплывает, "flip" - изображение съезжает слева или справа(выбирается автоматически). По умолчанию "flip"
 			 -->
 			 
 			<div id = "galary"			
-			speedOfScroll = "2000"
+			speedOfScroll = "3000"
 			speedAnimation = "750"
 			visibleButtons = "true"
 			visiblePoints = "true"
 			activeInterval = "true"
 			stopInterval = "true"
+			scrollStyle = "flip"
 			>
 				<img src = "./images/img1.jpg"/>
 				<img src = "./images/img2.jpg"/>

@@ -2,13 +2,15 @@ var jq = jQuery.noConflict();
 var secondImg = 0;
 var lengthOfImg;
 var activeImg = 0;
-var images = [];
+var images = [], sizeImg = [];
 var interval;
-var speedOfScroll, speedAnimation, visibleButtons, visiblePoints, activeInterval, stopInterval;
+var speedOfScroll, speedAnimation, visibleButtons, visiblePoints, activeInterval, stopInterval, scrollStyle;
 var activeButtons = true;
 var width, height;
 
 jq(document).ready(() => {
+	var checkScrollStyle = ['flip', 'flash'];
+	var boolcheck = false;
 	lengthOfImg = jq('img').length;
 	speedOfScroll = Number(jq('#galary').attr('speedOfScroll'));
 	speedAnimation = Number(jq('#galary').attr('speedAnimation'));
@@ -17,23 +19,41 @@ jq(document).ready(() => {
 	visiblePoints = jq('#galary').attr('visiblePoints');
 	activeInterval = jq('#galary').attr('activeInterval');
 	stopInterval = jq('#galary').attr('stopInterval');
+	scrollStyle = jq('#galary').attr('scrollStyle');
 	if(isNaN(speedOfScroll)) speedOfScroll = 3000;
 	if(isNaN(speedAnimation)) speedAnimation = 1000;
 	if(typeof(visibleButtons) == "undefined") visibleButtons = "true"; 
 	if(typeof(visiblePoints) == "undefined") visiblePoints = "true"; 
 	if(typeof(activeInterval) == "undefined") activeInterval = "true";
 	if(typeof(stopInterval) == "undefined") stopInterval = "true";
+	for(var i = 0; i < checkScrollStyle.length; i++){
+		if(scrollStyle == checkScrollStyle[i]){
+			boolcheck = true;
+			break;
+		}
+		else boolcheck = false;
+	}
+	if(boolcheck == false || typeof(scrollStyle) == "undefined") scrollStyle = 'flip';
 	CreateButtons();
 });
 
 function CreateButtons(){
 
-	for(var i = 0; i < lengthOfImg; i++){
+	for(let i = 0; i < lengthOfImg; i++){
 		var img = jq('#galary').children('img').eq(i)
 		images[i] = jq('img').eq(i).attr('src');
 		if(i > 1) img.css('display', 'none');
 		if(i == 0) img.css('z-index', '10');
 		if(i == 1) img.css('z-index', '5');
+
+		var helpImg = new Image();
+		helpImg.onload = function() {
+			height = this.height;
+			width = this.width;
+			if((width > height || width < height) && ((width / height) > (jq('#galary').width() / jq('#galary').height()))) sizeImg[i] = "0%";
+			else sizeImg[i] = "50%";
+			}
+		helpImg.src = images[i];
 	}
 
 	ChangeSizeImg();
@@ -50,10 +70,8 @@ function CreateButtons(){
 			var button = jq('<div/>');
 			button.attr("class", "buttonGalary");
 			jq("#galary").append(button);
-			if (i == 0) button.click(function(){right()});
-			else button.click(function(){left()});
-
-			
+			if (i == 0) button.click(right);
+			else button.click(left);
 		}
 	}
 
@@ -96,7 +114,7 @@ function left(){
 		scrollPause();
 		secondImg--;
 		if(secondImg < 0) secondImg = lengthOfImg - 1;
-		buttonClick()
+		buttonClick(1)
 	}
 	
 }
@@ -105,7 +123,7 @@ function right(){
 	if(activeButtons == true){
 		secondImg++;
 		if(secondImg > lengthOfImg - 1) secondImg = 0;
-		buttonClick()
+		buttonClick(2)
 		scrollPause();
 	}
 	
@@ -114,16 +132,19 @@ function right(){
 function changeImage(numberImg){
 	if(activeButtons == true){
 		if(secondImg != numberImg){
+			var a;
 			scrollPause();
+			if(secondImg > numberImg) a = 1;
+			else a = 2;
 			secondImg = numberImg;
-			buttonClick()
+			buttonClick(a)
 		}
 	}
 }
 
-function buttonClick(){
+function buttonClick(a){
 	imageActive();
-	imageAnimation();
+	imageAnimation(a);
 	if(visiblePoints) pointsAnimation();
 }
 
@@ -134,15 +155,30 @@ function imageActive(){
 	if(activeImg > 1) activeImg = 0;
 }
 
-function imageAnimation(){
+function imageAnimation(a){
 	var img = jq('#galary').children('img').eq(activeImg);
 	var blurImg = jq('.blurImgGalary').eq(activeImg);
 	ChangeSizeImg();
 	blurImg.attr('src', images[secondImg]);
-	img.css({'z-index': '10', 'opacity': '0'});
-	img.animate({opacity: 1}, speedAnimation);
+	
 	blurImg.css({'z-index': '6', 'opacity': '0'});
 	blurImg.animate({opacity: 1}, speedAnimation);
+
+	if(scrollStyle == "flash"){
+		img.css({'z-index': '10', 'opacity': '0'});
+		img.animate({opacity: 1}, speedAnimation);
+	}
+	else if(scrollStyle == "flip"){
+		if(a == 1){
+			img.css({'z-index': '10', 'opacity': '0', 'left': '0%'});
+			img.animate({left: sizeImg[secondImg], opacity: "1"}, speedAnimation);
+		}
+		else{
+			img.css({'z-index': '10', 'opacity': '0', 'left': '100%'});
+			img.animate({left: sizeImg[secondImg], opacity: "1"}, speedAnimation);
+		}
+	}
+	
 }
 
 function pointsAnimation(){
@@ -172,17 +208,11 @@ function ChangeSizeImg(){
 	img.attr('src', images[secondImg]).removeAttr('class');
 
 	var helpImg = new Image();
-	helpImg.onload = function() { 
+	helpImg.onload = function() {
 		height = this.height;
 		width = this.width;
-		
-		console.log(width / height,  jq('#galary').width() / jq('#galary').height())
-		if(width > height && ((width / height) > (jq('#galary').width() / jq('#galary').height()))) img.attr('class', 'horisontalImgGalary');
+		if((width > height || width < height) && ((width / height) > (jq('#galary').width() / jq('#galary').height()))){ img.attr('class', 'horisontalImgGalary');}
 		else img.attr('class', 'verticalImgGalary');
-		console.log(width, height, img.attr('class'))
 	}
 	helpImg.src = images[secondImg];
-
-	
-	
 }
