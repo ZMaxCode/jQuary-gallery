@@ -8,6 +8,7 @@ var speedOfScroll, speedAnimation, visibleButtons, visiblePoints, activeInterval
 var activeButtons = true;
 var width, height;
 var hoverInterval = true;
+var closeMiniImg
 
 jq(document).ready(() => {
 	var checkScrollStyle = ['flip', 'flash'];
@@ -83,6 +84,10 @@ function CreateButtons(){
 	shadow.attr("class", "shadowboxGalary");
 	jq("#galary").append(shadow);
 
+	var miniImg = jq('<div/>');
+	miniImg.attr("class", "miniImageGalary");
+	jq("#galary").append(miniImg);
+
 	if(visiblePoints == "true"){
 		var pointsBlock = jq('<div/>');
 		pointsBlock.attr("class", "pointsBlockGalary");
@@ -94,14 +99,36 @@ function CreateButtons(){
 			point.attr("class", "pointGalary");
 			point.attr("id", "pointGalary" + i);
 			jq("#pointsBlockGalary").append(point);
+			point.css('background-image', 'url(' + images[i] + ')')
 			if(clickedPoints == "true") jq('#pointGalary' + i).click(() => changeImage(i))
 			else point.css('cursor', 'default');
+			point.mouseover(() => {
+				if(secondImg != i){
+					jq('#pointGalary' + i).css('opacity', '0.5');
+					miniImg.css({
+						'background-image': 'url(' + images[i] + ')',
+						'opacity' : '1'
+					})
+					closeMiniImg = i;
+				}
+			})
+			point.mouseout(() => {
+				jq('#pointGalary' + i).css('opacity', '1')
+				miniImg.css( 'opacity', '0')
+				closeMiniImg = i;
+			})
 		}
+
+		console.log(jq('#pointsBlockGalary').height() + jq('#pointsBlockGalary').offset.top + 15, jq('#pointsBlockGalary').offset.top)
+
+		miniImg.css('bottom', jq('#pointsBlockGalary').height() + 25 + 'px');
+
+		jq('.pointGalary').css('transition', speedAnimation + 'ms')
 
 		jq('.pointGalary').eq(0).css({
 			'width': '40px',
 			'height': '40px',
-			'margin': '5px 15px 5px 15px',
+			'margin': '15px 15px 15px 15px',
 		})
 	}
 
@@ -168,6 +195,10 @@ function buttonClick(a){
 		clearInterval(interval)
 		if(hoverInterval == true) interval = setInterval(() => right(), speedOfScroll)
 	}
+	if(closeMiniImg == secondImg){
+		jq('#pointGalary' + secondImg).css('opacity', '1')
+		jq('.miniImgGalary').css( 'opacity', '0')
+	}
 	imageActive();
 	imageAnimation(a);
 	if(visiblePoints) pointsAnimation();
@@ -211,17 +242,17 @@ function imageAnimation(a){
 function pointsAnimation(){
 	for(var i = 0; i < lengthOfImg; i++){
 		if(i == secondImg)
-		jq('.pointGalary').eq(i).animate({
-			width: '40px',
-			height: '40px',
-			margin: '5px 15px 5px 15px',
-		}, speedAnimation)
+		jq('.pointGalary').eq(i).css({
+			'width': '40px',
+			'height': '40px',
+			'margin': '15px 15px 15px 15px',
+		})
 		else
-		jq('.pointGalary').eq(i).animate({
-			width: '50px',
-			height: '50px',
-			margin: '0px 10px 0px 10px',
-		}, speedAnimation)
+		jq('.pointGalary').eq(i).css({
+			'width': '50px',
+			'height': '50px',
+			'margin': '10px 10px 10px 10px',
+		})
 	}
 }
 
