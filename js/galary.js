@@ -4,9 +4,10 @@ var lengthOfImg;
 var activeImg = 0;
 var images = [], sizeImg = [];
 var interval;
-var speedOfScroll, speedAnimation, visibleButtons, visiblePoints, activeInterval, stopInterval, scrollStyle;
+var speedOfScroll, speedAnimation, visibleButtons, visiblePoints, activeInterval, stopInterval, scrollStyle, clickedPoints;
 var activeButtons = true;
 var width, height;
+var hoverInterval = true;
 
 jq(document).ready(() => {
 	var checkScrollStyle = ['flip', 'flash'];
@@ -20,12 +21,15 @@ jq(document).ready(() => {
 	activeInterval = jq('#galary').attr('activeInterval');
 	stopInterval = jq('#galary').attr('stopInterval');
 	scrollStyle = jq('#galary').attr('scrollStyle');
+	clickedPoints = jq('#galary').attr('clickedPoints');
+
 	if(isNaN(speedOfScroll)) speedOfScroll = 3000;
 	if(isNaN(speedAnimation)) speedAnimation = 1000;
 	if(typeof(visibleButtons) == "undefined") visibleButtons = "true"; 
 	if(typeof(visiblePoints) == "undefined") visiblePoints = "true"; 
 	if(typeof(activeInterval) == "undefined") activeInterval = "true";
 	if(typeof(stopInterval) == "undefined") stopInterval = "true";
+	if(typeof(clickedPoints) == "undefined") clickedPoints = "true";
 	for(var i = 0; i < checkScrollStyle.length; i++){
 		if(scrollStyle == checkScrollStyle[i]){
 			boolcheck = true;
@@ -35,7 +39,7 @@ jq(document).ready(() => {
 	}
 	if(boolcheck == false || typeof(scrollStyle) == "undefined") scrollStyle = 'flip';
 	CreateButtons();
-});
+})
 
 function CreateButtons(){
 
@@ -90,7 +94,8 @@ function CreateButtons(){
 			point.attr("class", "pointGalary");
 			point.attr("id", "pointGalary" + i);
 			jq("#pointsBlockGalary").append(point);
-			jq('#pointGalary' + i).click(() => changeImage(i))
+			if(clickedPoints == "true") jq('#pointGalary' + i).click(() => changeImage(i))
+			else point.css('cursor', 'default');
 		}
 
 		jq('.pointGalary').eq(0).css({
@@ -103,10 +108,26 @@ function CreateButtons(){
 	if(activeInterval == "true"){
 		interval = setInterval(() => right(), speedOfScroll)
 		if(stopInterval == "true"){
-			jq('#galary').mouseover(() => clearInterval(interval))
-			jq('#galary').mouseout(() => interval = setInterval(() => right(), speedOfScroll))
+			jq('#galary').mouseover(() => {
+				clearInterval(interval)
+				hoverInterval = false;
+			})
+			jq('#galary').mouseout(() => {
+				interval = setInterval(() => right(), speedOfScroll)
+				hoverInterval = true;
+			})
 		}
 	}
+
+	jq(window).blur(function(){
+		if(activeInterval == "true") clearInterval(interval)
+	})
+	
+
+	jq(window).focus(function(){
+		if(activeInterval == "true") interval = setInterval(() => right(), speedOfScroll)
+	})
+
 }
 
 function left(){
@@ -143,6 +164,10 @@ function changeImage(numberImg){
 }
 
 function buttonClick(a){
+	if(activeInterval == "true"){
+		clearInterval(interval)
+		if(hoverInterval == true) interval = setInterval(() => right(), speedOfScroll)
+	}
 	imageActive();
 	imageAnimation(a);
 	if(visiblePoints) pointsAnimation();
@@ -180,7 +205,7 @@ function imageAnimation(a){
 			img.animate({left: sizeImg[secondImg], opacity: "1"}, speedAnimation);
 		}
 	}
-	
+
 }
 
 function pointsAnimation(){
